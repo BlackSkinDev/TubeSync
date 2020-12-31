@@ -65,7 +65,7 @@
                           
                            
                             <h6>TubeSync is a Web Application that allows you to watch YouTube videos in Sync with your Friends.</h6>
-                              <form action="/load" method="post">
+                              <form action="/parties" method="post">
                                  {{csrf_field() }}
                                 <div class="form-group">
                                     <label class="mt-4"><b>YouTube Url</b></label>

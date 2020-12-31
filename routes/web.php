@@ -24,8 +24,8 @@ Route::post('/login','AuthViewController@getPostLogin');
 
 Route::group(['middleware'=>'auth'],function(){
 
-	Route::post('/load','AuthViewController@postLoad')->name('load');
-	Route::get('/load/{id}','AuthViewController@getLoad')->name('load');
+	Route::post('/parties','AuthViewController@postparties')->name('parties');
+	Route::get('/parties/{url}','AuthViewController@getparties')->name('parties');
     Route::get('/dashboard','AuthViewController@getDashboard')->name('dashboard');
     Route::get('/logout','AuthViewController@getLogout')->name('logout');
 

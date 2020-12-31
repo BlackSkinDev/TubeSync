@@ -55,7 +55,7 @@
                                          <div id="visitfromworld" style="width:100%; height:370px">
                                             
                                              <iframe width="700" height="345"
-                                                src="https://www.youtube.com/embed/{{$id}}">
+                                                src="https://www.youtube.com/embed/{{$party->url}}">
                                             </iframe>
                                            <button> <i class="ik ik-play">play</i></button>
                                             <button> <i class="ik ik-pause">pause</i></button>
@@ -69,13 +69,20 @@
                             <div class="card">
                                     <div class="card-header"><h3>Connected users</h3></div>
                                     <div class="card-body">
-                                        <div id="visitfromworld" style="width:100%; height:350px">
+                                        <div id="visitfromworld" style="width:100%; height:370px">
                                             <p>Chilling Loccini</p><hr>
                                             <p>Chilling Loccini</p><hr>
                                             <p>Chilling Loccini</p><hr>
                                             <p>Chilling Loccini</p><hr>
                                             <p>Chilling Loccini</p><hr>
-
+                                            <p><b>Host</b>: {{$party->creator()->first()->name}}</p><hr>
+                                            <div class="input-group mb-3">
+                                              <input type="text" class="form-control" id="link" value="{{url()->current()}}" aria-describedby="basic-addon2" disabled>
+                                              <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="copy('link')">Copy Link</button>
+                                              
+                                              </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -84,7 +91,10 @@
                 </div>
 
 
-        
+
+
+
+
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
         <script src="../plugins/popper.js/dist/umd/popper.min.js"></script>
@@ -92,6 +102,19 @@
         <script src="../plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
         <script src="../plugins/screenfull/dist/screenfull.js"></script>
         <script src="../dist/js/theme.js"></script>
+        <script>
+
+            function copy(element_id){
+              var aux = document.createElement("div");
+              aux.setAttribute("contentEditable", true);
+              aux.innerHTML = document.getElementById(element_id).value;
+              aux.setAttribute("onfocus", "document.execCommand('selectAll',false,null)"); 
+              document.body.appendChild(aux);
+              aux.focus();
+              document.execCommand("copy");
+              document.body.removeChild(aux);
+            }
+        </script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
