@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="plugins/perfect-scrollbar/css/perfect-scrollbar.css">
         <link rel="stylesheet" href="dist/css/theme.min.css">
         <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="src/js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
 
@@ -52,14 +53,15 @@
                             <div class="card">
                                 <div class="card-header"><h3>Watch On TubeSync</h3></div>
                                     <div class="card-body">
-                                         <div id="visitfromworld" style="width:100%; height:370px">
-                                            
-                                             <iframe width="700" height="345"
-                                                src="https://www.youtube.com/embed/{{$party->url}}">
-                                            </iframe>
-                                           <button> <i class="ik ik-play">play</i></button>
-                                            <button> <i class="ik ik-pause">pause</i></button>
-                                             <input type="range" id="fastforward" min="0" max="100" value="0" style="width: 591px;">
+                                         <div id="party" style="width:100%; height:370px">
+                                           
+                                         </div>
+                                         <div>
+                                             <button id="play"> <i class="fa fa-play fs-4x"></i></button>
+                                            <button id="pause"> <i class="fa fa-pause fs-4x"></i></button>
+                                            <button id="mute-toggle"><span>mute</span></button>
+                                            <p><span id="current-time">0:00</span> / <span id="duration">0:00</span></p>
+                                             <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;">
                                          </div>
                                     </div>
                             </div>
@@ -102,6 +104,8 @@
         <script src="../plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
         <script src="../plugins/screenfull/dist/screenfull.js"></script>
         <script src="../dist/js/theme.js"></script>
+
+        <script src="https://www.youtube.com/iframe_api"></script>
         <script>
 
             function copy(element_id){
@@ -114,6 +118,118 @@
               document.execCommand("copy");
               document.body.removeChild(aux);
             }
+
+
+
+            $(document).ready(function(){
+
+                var player;
+                window.YT.ready(function(){
+                        player = new window.YT.Player('party', {
+                        width: 600,
+                        height: 400,
+                        videoId: "{{$party->url}}",
+                        playerVars: {
+                            color: 'white',
+                        },
+                          events: {
+                            onReady: initialize
+                        }
+                    });
+                })
+
+                function initialize(){
+
+                        // Update the controls on load
+                        updateTimerDisplay();
+                        updateProgressBar();
+
+                
+
+                        // Start interval to update elapsed time display and
+                        // the elapsed part of the progress bar every second.
+                        time_update_interval = setInterval(function () {
+                        updateTimerDisplay();
+                        updateProgressBar();
+                }, 1000)
+
+                // Clear any old interval.
+                //clearInterval(time_update_interval);
+             }
+
+            // This function is called by initialize()
+            function updateTimerDisplay(){
+                // Update current time text display.
+                $('#current-time').text(formatTime( player.getCurrentTime() ));
+                $('#duration').text(formatTime( player.getDuration() ));
+            }
+
+            function formatTime(time){
+                time = Math.round(time);
+
+                var minutes = Math.floor(time / 60),
+                seconds = time - minutes * 60;
+
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+
+                return minutes + ":" + seconds;
+            }
+
+            $('#progress-bar').on('mouseup touchend', function (e) {
+
+                // Calculate the new time for the video.
+                // new time in seconds = total duration in seconds * ( value of range input / 100 )
+                var newTime = player.getDuration() * (e.target.value / 100);
+
+                // Skip video to new time.
+                player.seekTo(newTime);
+                console.log(newTime)
+            });
+
+
+            // This function is called by initialize()
+            function updateProgressBar(){
+                // Update the value of our progress bar accordingly.
+                $('#progress-bar').val((player.getCurrentTime() / player.getDuration()) * 100);
+            }
+
+           
+                $('#play').on('click', function () {
+
+                    player.playVideo();
+
+                });
+
+                $('#pause').on('click', function () {
+
+                    player.pauseVideo();
+
+                });
+
+                $('#mute-toggle').on('click', function() {
+                    var mute_toggle = $(this);
+
+                    if(player.isMuted()){
+                        player.unMute();
+                        mute_toggle.text('mute');
+                        
+                    }
+                    else{
+                        player.mute();
+                        mute_toggle.text('unmute');
+                        
+                    }
+              });
+
+              
+               
+             })
+
+            
+
+
+
+
         </script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
