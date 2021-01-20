@@ -15,19 +15,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/','AuthViewController@getRegister');
 
-Route::get('/login','AuthViewController@getLogin')->name('signin');
+Route::get('/signin','AuthViewController@getLogin')->name('signin');
 
 Route::post('/','AuthViewController@getSignup');
 
-Route::post('/login','AuthViewController@getPostLogin');
+Route::post('/signin','AuthViewController@getPostLogin');
 
 
 Route::group(['middleware'=>'auth'],function(){
 
 	Route::post('/parties','AuthViewController@postparties')->name('parties');
-	Route::get('/parties/{url}','AuthViewController@getparties')->name('parties');
+	Route::get('/join/{url}','AuthViewController@getparties')->name('parties');
     Route::get('/dashboard','AuthViewController@getDashboard')->name('dashboard');
     Route::get('/logout','AuthViewController@getLogout')->name('logout');
+    Route::get('/messages/{session}','AuthViewController@getMessages')->name('getMessages');
 
+    Route::post('/send/{session}','AuthViewController@sendMessage')->name('sendMessage');
+
+   
+   
 			
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

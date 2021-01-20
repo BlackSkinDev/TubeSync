@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePartyTable extends Migration
+class CreateMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreatePartyTable extends Migration
      */
     public function up()
     {
-        Schema::create('parties', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->string('party_id');
-            $table->integer('user_id');
-            $table->integer('status');
             $table->timestamps();
+            $table->text('content');
+            $table->integer('user_id');
+            $table->unsignedBigInteger('party_id');// foreign key
+            $table->foreign('party_id')->references('id')
+            ->on('parties')->onDelete('cascade');
         });
     }
 
@@ -29,6 +31,6 @@ class CreatePartyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('party');
+        Schema::dropIfExists('messages');
     }
 }

@@ -49,6 +49,9 @@
                             @endif
 
                             <div class="jumbotron">
+                                 <div class="sign-btn" style="float: right;">
+                                                 <a href="/logout"><button class="btn btn-theme">Log Out</button></a>
+                                        </div>
                                 <div class="row">
 
                                     <div class="col-md-6">
@@ -56,15 +59,13 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                         <div class="sign-btn text-center mb-4">
-                                                 <a href="/logout"><button class="btn btn-theme">Log Out</button></a>
-                                        </div>
+                                        
                                     </div>
                                     
                                 </div>
                           
                            
-                            <h6>TubeSync is a Web Application that allows you to watch YouTube videos in Sync with your Friends.</h6>
+                            <h6 class="mt-4">TubeSync is a Web Application that allows you to watch YouTube videos in Sync with your Friends.</h6>
                               <form action="/parties" method="post">
                                  {{csrf_field() }}
                                 <div class="form-group">

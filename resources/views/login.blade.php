@@ -45,7 +45,7 @@
                                 @endif
                            
                             <h3>Login to TubeSync</h3>
-                            <form action="/login" method="post">
+                            <form action="/signin" method="post">
                                  {{csrf_field() }}
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Email your email" name="email">

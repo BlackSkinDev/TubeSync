@@ -11,12 +11,16 @@ class Party extends Model
 
      protected $fillable = [
         'party_id',
-        'creator',
+        'user_id',
         'status',
         'url',
     ];
 
-    public function creator(){
-    	 return $this->belongsTo(User::class, 'creator', 'id');
+    public function user(){
+    	 return $this->belongsTo(User::class);
+    }
+
+    public function messages(){
+        return $this->HasMany(Message::class);
     }
 }

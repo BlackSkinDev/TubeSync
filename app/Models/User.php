@@ -23,6 +23,10 @@ class User extends Authenticatable
         'username',
     ];
 
+     public function sessions(){
+         return $this->HasMany(Party::class);
+     }
+
     /**
      * The attributes that should be hidden for arrays.
      *

@@ -12,6 +12,12 @@ use App\Models\User;
 
 use App\Models\Party;
 
+use App\Models\Message;
+
+use App\Events\StartSession;
+
+use App\Events\NewMessage;
+
 use Illuminate\Support\Facades\Route;
 
 use Auth;
@@ -67,12 +73,13 @@ class AuthViewController extends Controller
       ]);
       $rawUrl = substr($request['url'], strpos($request['url'], "=") + 1);
 
-      $party_id=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 9);
+      $party_id=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 9).Auth::user()->id;
 
-      $party= Party::create(
+
+
+      $party= Auth::user()->sessions()->create(
           [
             'party_id'=>$party_id,
-            'creator'=>Auth::user()->id,
             'status'=>0,
             'url'=>$rawUrl
           ]
@@ -80,7 +87,7 @@ class AuthViewController extends Controller
 
       
       if ($party) {
-        return redirect()->route('parties',['url'=>$party->url]);
+        return redirect()->route('parties',['url'=>$party->party_id]);
       }
       else{
         return "error";
@@ -91,14 +98,59 @@ class AuthViewController extends Controller
     }
     
     public function getparties($url){
-      $party=Party::where('url','=',$url)->first();
-      return view('watch',['party'=>$party]);
+      
+      $session= Party::where('party_id','=',$url)->with('user')->first();
+
+      event(new StartSession($session));
+
+    
+              
+      return view('watch',['session'=>$session]);
+
     }
 
     public function getLogout(){
         Auth::logout();
         return redirect()->route('signin');
     }
-    
+
+    public function getMessages(Party $session){
+      return response()->json($session->messages()->with('user')->get());
+    }
+
+    public function sendMessage(Request $request, Party $session){
+
+             $message = $session->messages()->create([
+                    
+                    'content' => $request->content,
+                    
+                    'user_id' => Auth::user()->id
+                
+              ]);
+
+           
+            $NewMessage = Message::where('id', $message->id)->first();
+
+                        
+            broadcast(new NewMessage($NewMessage))->toOthers();
+            
+            return $NewMessage->toJson();
+            
+
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

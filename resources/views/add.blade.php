@@ -106,7 +106,7 @@
                                 </div>
                             </form>
                             <div class="register">
-                                <p><a href="/login">Sign In</a></p>
+                                <p><a href="/signin">Sign In</a></p>
                             </div>
                         </div>
                     </div>
