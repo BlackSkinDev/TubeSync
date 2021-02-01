@@ -106,7 +106,10 @@
                                 </div>
                             </form>
                             <div class="register">
-                                <p><a href="/signin">Sign In</a></p>
+                                <p>
+                                    <a href="/signin" class="btn btn-secondary">Sign In</a>
+                                    <a href="/signin" class="btn btn-warning">Sign in with google</a>
+                                </p>
                             </div>
                         </div>
                     </div>

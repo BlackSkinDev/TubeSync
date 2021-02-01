@@ -22,6 +22,14 @@ Route::post('/','AuthViewController@getSignup');
 Route::post('/signin','AuthViewController@getPostLogin');
 
 
+// social login routes
+Route::get('/auth/redirect','AuthViewController@redirect')->name('auth/callback');
+
+Route::get('/callback/google','AuthViewController@callback')->name('google.callback');
+
+
+
+
 Route::group(['middleware'=>'auth'],function(){
 
 	Route::post('/parties','AuthViewController@postparties')->name('parties');

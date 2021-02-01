@@ -66,7 +66,7 @@
                                     @if(Auth::user()->id==$session->user->id)
                                         <button v-on:click="play"> <i class="fa fa-play fs-4x"></i></button>
                                         <button id="pause" v-on:click="pause"> <i class="fa fa-pause fs-4x"></i></button>
-                                        <button id="mute-toggle"><span>mute</span></button>
+                                        <button id="mute-toggle" v-on:click="mute"><span>mute</span></button>
                                     
                                     @endif
                                     <p><span id="current-time">0:00</span> / <span id="duration">0:00</span></p>
@@ -223,6 +223,11 @@
         
         // my vue.js section
 
+
+var  session ={!! $session->toJson() !!};
+var LoggedInUser ={!! Auth::check() ? Auth::user()->toJson(): 'null' !!};
+var isAdmin= LoggedInUser.id==session.user_id;
+
 const app = new Vue({
     el: '#app',
     data:{
@@ -234,6 +239,7 @@ const app = new Vue({
         typing:'',
         activeUser:false,
         typingTimer:false,
+        isAdmin,
             
     },
     mounted(){
@@ -379,7 +385,25 @@ const app = new Vue({
                     player.playVideo();
                     
                  
+            })
+
+             .listenForWhisper('mute', (e) => {
+                    console.log(e.info)
+
+                    if(player.isMuted()){
+                        player.unMute();
+                        $("#mute_toggle").text('mute');
+                        
+                    }
+                    else{
+                        player.mute();
+                        $("#mute_toggle").text('unmute');
+                        
+                    }
+                    
+                 
             });
+
 
 
         },
@@ -457,7 +481,8 @@ const app = new Vue({
                         },
 
                         playerVars: {
-                              'autoplay': 0,
+
+                              'autoplay': !this.isAdmin,
                               'controls': 0,
                               'disablekb': 0,
                               'fs': 0,
@@ -476,6 +501,11 @@ const app = new Vue({
                 function initialize(){
                         updateTimerDisplay();
                         updateProgressBar();
+                        
+                       setTimeout(()=>{
+                            player.pauseVideo();
+                       },1000);
+
                         time_update_interval = setInterval(function () {
                         updateTimerDisplay();
                         updateProgressBar();
@@ -522,7 +552,7 @@ const app = new Vue({
                     info: "video paused",
              });
 
-            console.log("Video paused")
+            // console.log("Video paused")
            
             player.pauseVideo();
 
@@ -535,8 +565,17 @@ const app = new Vue({
                 .whisper('played', {
                     info: "video played",
              });
-            console.log("Video Played")
+            // console.log("Video Played")
             player.playVideo();
+        },
+
+        mute(){
+
+             Echo.join('chatroom.'+this.session.id)
+                .whisper('mute', {
+                    info: "video muted",
+             });
+
         },
 
 

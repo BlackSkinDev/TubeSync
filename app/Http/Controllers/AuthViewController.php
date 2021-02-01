@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 use Auth;
 
 use Session;
+
+use Laravel\Socialite\Facades\Socialite;
+
 class AuthViewController extends Controller
 {
     
@@ -62,6 +65,8 @@ class AuthViewController extends Controller
         return back();
       }
     }
+
+
 
     public function getDashboard(){
       return view('dashboard');
@@ -138,6 +143,39 @@ class AuthViewController extends Controller
             
 
     }
+
+  public function redirect(){
+    return Socialite::driver('google')->redirect();
+  }
+
+  public function callback(){
+    
+    try {
+        $user = Socialite::driver('google')->user();
+        $user = User::where('google_id', $user->id)->first();
+
+        if($user){
+            Auth::login($user);
+            return redirect('/home');
+        }else{
+            $newUser = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'google_id'=> $user->id,
+                'password' => encrypt('123456dummy')
+            ]);
+            Auth::login($newUser);
+            return redirect('/home');
+        }
+      } 
+
+        catch (Exception $e) {
+            dd($e->getMessage());
+        }
+   }
+
+
+
 
 }
 

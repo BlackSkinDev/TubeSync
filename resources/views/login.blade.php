@@ -73,8 +73,12 @@
                                 <div class="sign-btn text-center mb-4">
                                     <button class="btn btn-theme">Sign In</button>
                                 </div>
+                              
                                  <div class="register">
-                                <p><a href="/">Create New Account</a></p>
+                                <p>
+                                    <a href="/" class="btn btn-primary">Create New Account</a>
+                                    <a href="/" class="btn btn-warning">Sign In with google</a>
+                                </p>
                             </div>
                             </form>
                         </div>
