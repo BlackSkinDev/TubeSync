@@ -7,11 +7,11 @@
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <link rel="icon" href="../favicon.ico" type="image/x-icon" />
 
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-        
+
         <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="plugins/ionicons/dist/css/ionicons.min.css">
@@ -36,14 +36,14 @@
                     <div class="col-xl-4 col-lg-6 col-md-7 my-auto p-0">
                         <div class="authentication-form mx-auto">
                             <div class="logo-centered">
-                                <a href="/"><h1>TubeSync</h1></a>
+                                <a href="/"><h1></h1></a>
                             </div>
                             @if(Session::has('message'))
                                   <div class="alert alert-danger" role="alert">
                                     {{Session::get('message')}}
                                   </div>
                                 @endif
-                           
+
                             <h3>Login to TubeSync</h3>
                             <form action="/signin" method="post">
                                  {{csrf_field() }}
@@ -65,19 +65,19 @@
                                       </div><br>
                                      @endif
                                 </div>
-                                
+
                                     <div class="col text-right">
                                        <!--  <a href="forgot-password.html">Forgot Password ?</a> -->
                                     </div>
-                                
+
                                 <div class="sign-btn text-center mb-4">
                                     <button class="btn btn-theme">Sign In</button>
                                 </div>
-                              
+
                                  <div class="register">
                                 <p>
                                     <a href="/" class="btn btn-primary">Create New Account</a>
-                                    <a href="/" class="btn btn-warning">Sign In with google</a>
+                                    <a href="{{route('redirect','github')}}" class="btn btn-warning">Sign In with github</a>
                                 </p>
                             </div>
                             </form>
@@ -86,7 +86,7 @@
                 </div>
             </div>
         </div>
-        
+
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
         <script src="../plugins/popper.js/dist/umd/popper.min.js"></script>

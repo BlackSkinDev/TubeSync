@@ -71,7 +71,7 @@
                                     @endif
                                     <p><span id="current-time">0:00</span> / <span id="duration">0:00</span></p>
                                      @if(Auth::user()->id==$session->user->id)
-                                    <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;">
+                                    <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;" v-on:mouseup="fowardOrRewind">
                                       @endif
                                 </div>
                             </div>
@@ -177,16 +177,16 @@
 
 
 
-             $('#progress-bar').on('mouseup touchend', function (e) {
+            //  $('#progress-bar').on('mouseup touchend', function (e) {
 
-                // Calculate the new time for the video.
-                // new time in seconds = total duration in seconds * ( value of range input / 100 )
-                var newTime = player.getDuration() * (e.target.value / 100);
+            //     // Calculate the new time for the video.
+            //     // new time in seconds = total duration in seconds * ( value of range input / 100 )
+            //     var newTime = player.getDuration() * (e.target.value / 100);
 
-                // Skip video to new time.
-                player.seekTo(newTime);
-                console.log(newTime)
-            });
+            //     // Skip video to new time.
+            //     player.seekTo(newTime);
+              
+            // });
 
 
            
@@ -402,7 +402,17 @@ const app = new Vue({
                     }
                     
                  
-            });
+            })
+
+              .listenForWhisper('change', (e) => {
+                    // Calculate the new time for the video.
+                    // new time in seconds = total duration in seconds * ( value of range input / 100 )
+                    var newTime = player.getDuration() * (e.target.value / 100);
+
+                    // Skip video to new time.
+                    player.seekTo(newTime);
+              
+              });
 
 
 
@@ -482,7 +492,8 @@ const app = new Vue({
 
                         playerVars: {
 
-                              'autoplay': !this.isAdmin,
+                              //'autoplay': !this.isAdmin,
+                              'autoplay': 0,
                               'controls': 0,
                               'disablekb': 0,
                               'fs': 0,
@@ -502,9 +513,12 @@ const app = new Vue({
                         updateTimerDisplay();
                         updateProgressBar();
                         
-                       setTimeout(()=>{
-                            player.pauseVideo();
-                       },1000);
+
+                        //Dr. Cloud
+
+                       // setTimeout(()=>{
+                       //      player.pauseVideo();
+                       // },1000);
 
                         time_update_interval = setInterval(function () {
                         updateTimerDisplay();
@@ -575,6 +589,30 @@ const app = new Vue({
                 .whisper('mute', {
                     info: "video muted",
              });
+
+            //  if(player.isMuted()){
+            //     player.unMute();
+            //     $("#mute_toggle").text('mute');
+                
+            // }
+            // else{
+            //     player.mute();
+            //     $("#mute_toggle").text('unmute');
+                
+            // }
+        },
+
+        fowardOrRewind(){
+
+             Echo.join('chatroom.'+this.session.id)
+                .whisper('change', {
+                    info: "video forward or rewinded",
+             });
+
+             var newTime = player.getDuration() * (e.target.value / 100);
+
+                    // Skip video to new time.
+                    player.seekTo(newTime);
 
         },
 

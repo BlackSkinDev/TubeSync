@@ -28,7 +28,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthViewController extends Controller
 {
-    
+
     public function getRegister(){
       return view('add');
     }
@@ -44,24 +44,28 @@ class AuthViewController extends Controller
         "email"=>$request['email'],
         "password"=>bcrypt($request['password']),
         "username"=>$request['username'],
+        "provider"=>0,
+        "github_id"=>0,
+        
+
       ]);
     Session::flash('message','Accounted Created Successfully');
     return back();
     }
 
   public function getPostLogin(LoginRequest $request){
-        
+
       $credentials= ['email'=>$request['email'],'password'=>$request['password']];
 
       $errorType=false;
-    
+
     if (Auth::attempt($credentials)) {
         return redirect()->route('dashboard');
-        
+
       }
       else{
         Session::flash('message','Log in Failed');
-        
+
         return back();
       }
     }
@@ -90,7 +94,7 @@ class AuthViewController extends Controller
           ]
       );
 
-      
+
       if ($party) {
         return redirect()->route('parties',['url'=>$party->party_id]);
       }
@@ -99,17 +103,17 @@ class AuthViewController extends Controller
       }
 
       //https://protected-hollows-74005.herokuapp.com/sessions/Iql-f33u2W
-      
+
     }
-    
+
     public function getparties($url){
-      
+
       $session= Party::where('party_id','=',$url)->with('user')->first();
 
       event(new StartSession($session));
 
-    
-              
+
+
       return view('watch',['session'=>$session]);
 
     }
@@ -126,53 +130,77 @@ class AuthViewController extends Controller
     public function sendMessage(Request $request, Party $session){
 
              $message = $session->messages()->create([
-                    
+
                     'content' => $request->content,
-                    
+
                     'user_id' => Auth::user()->id
-                
+
               ]);
 
-           
+
             $NewMessage = Message::where('id', $message->id)->first();
 
-                        
+
             broadcast(new NewMessage($NewMessage))->toOthers();
-            
+
             return $NewMessage->toJson();
-            
+
 
     }
 
-  public function redirect(){
-    return Socialite::driver('google')->redirect();
-  }
 
-  public function callback(){
-    
-    try {
-        $user = Socialite::driver('google')->user();
-        $user = User::where('google_id', $user->id)->first();
+    public function redirect($provider){
 
-        if($user){
-            Auth::login($user);
-            return redirect('/home');
-        }else{
-            $newUser = User::create([
-                'name' => $user->name,
-                'email' => $user->email,
-                'google_id'=> $user->id,
-                'password' => encrypt('123456dummy')
+        return Socialite::driver($provider)->redirect();
+
+    }
+
+    public function callback($provider)
+
+    {
+
+        $getInfo = Socialite::driver($provider)->user();
+        $user = $this->createUser($getInfo,$provider);
+        Auth::login($user);
+        return redirect()->route('dashboard');
+
+    }
+
+    function createUser($getInfo,$provider){
+
+        $user = User::where('github_id', $getInfo->id)->first();
+
+        if (!$user) {
+
+            $fullname = explode(" ", $getInfo->name);
+
+            if (count($fullname)<2) {
+                $username= $fullname[0];
+            }
+            else{
+              $username=$fullname[1];
+            }
+           
+            $user = User::create([
+
+                'name'     => $getInfo->name,
+
+                'email'    => $getInfo->email,
+
+                'provider' => $provider,
+
+                'github_id' => $getInfo->id,
+
+                'password' => bcrypt('123456dummy'),
+
+                'username'=>$username
+
             ]);
-            Auth::login($newUser);
-            return redirect('/home');
-        }
-      } 
 
-        catch (Exception $e) {
-            dd($e->getMessage());
         }
-   }
+        return $user;
+
+    }
 
 
 

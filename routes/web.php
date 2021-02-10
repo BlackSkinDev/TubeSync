@@ -28,6 +28,11 @@ Route::get('/auth/redirect','AuthViewController@redirect')->name('auth/callback'
 Route::get('/callback/google','AuthViewController@callback')->name('google.callback');
 
 
+// github routes
+Route::get('/auth/redirect/{provider}', 'AuthViewController@redirect')->name('redirect');
+Route::get('/callback/{provider}', 'AuthViewController@callback')->name('callback');
+
+
 
 
 Route::group(['middleware'=>'auth'],function(){
@@ -40,9 +45,9 @@ Route::group(['middleware'=>'auth'],function(){
 
     Route::post('/send/{session}','AuthViewController@sendMessage')->name('sendMessage');
 
-   
-   
-			
+
+
+
 });
 
 Auth::routes();

@@ -21,8 +21,8 @@ class User extends Authenticatable
         'email',
         'password',
         'username',
-        'google_id',
-        'facebook_id',
+        'github_id',
+        'provider',
     ];
 
      public function sessions(){
