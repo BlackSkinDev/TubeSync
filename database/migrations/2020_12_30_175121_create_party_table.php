@@ -18,6 +18,7 @@ class CreatePartyTable extends Migration
             $table->string('party_id');
             $table->integer('user_id');
             $table->integer('status');
+            $table->string('url');
             $table->timestamps();
         });
     }
