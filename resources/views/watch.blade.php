@@ -609,11 +609,6 @@ const app = new Vue({
                     info: "video forward or rewinded",
              });
 
-             var newTime = player.getDuration() * (e.target.value / 100);
-
-                    // Skip video to new time.
-                    player.seekTo(newTime);
-
         },
 
 
