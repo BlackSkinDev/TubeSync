@@ -39,6 +39,7 @@ return [
 
         'redirect' => 'https://afrotubesync.herokuapp.com/callback/github',
 
+
     ],
 
 ];

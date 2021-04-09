@@ -159,7 +159,8 @@ class AuthViewController extends Controller
 
     {
 
-        $getInfo = Socialite::driver($provider)->user();
+        //$getInfo = Socialite::driver($provider)->user();
+         $getInfo=Socialite::driver($provider)->stateless()->user();
         $user = $this->createUser($getInfo,$provider);
         Auth::login($user);
         return redirect()->route('dashboard');
