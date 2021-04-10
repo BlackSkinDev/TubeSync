@@ -217,6 +217,9 @@
                     }
               });
 
+
+
+
               
                
               });  //end of jquery ready
@@ -380,10 +383,14 @@ const app = new Vue({
             })
 
             .listenForWhisper('played', (e) => {
-                    //console.log(e.info)
-                    console.log(player)
-                    player.playVideo();
                     
+                    //player.playVideo();
+                    
+                     player.seekTo(e.time);
+
+                     //player.playVideo()
+                     console.log("seeked")
+
                  
             })
 
@@ -406,11 +413,11 @@ const app = new Vue({
 
               .listenForWhisper('change', (e) => {
                     // Calculate the new time for the video.
-                    // new time in seconds = total duration in seconds * ( value of range input / 100 )
-                    var newTime = player.getDuration() * (e.target.value / 100);
+                    // // new time in seconds = total duration in seconds * ( value of range input / 100 )
+                    // var newTime = player.getDuration() * (e.target.value / 100);
 
-                    // Skip video to new time.
-                    player.seekTo(newTime);
+                    // // Skip video to new time.
+                    // player.seekTo(newTime);
               
               });
 
@@ -565,9 +572,6 @@ const app = new Vue({
                 .whisper('paused', {
                     info: "video paused",
              });
-
-            // console.log("Video paused")
-           
             player.pauseVideo();
 
            
@@ -577,9 +581,8 @@ const app = new Vue({
         play(){
              Echo.join('chatroom.'+this.session.id)
                 .whisper('played', {
-                    info: "video played",
+                    time: player.getCurrentTime() / (player.getDuration() * 100),
              });
-            // console.log("Video Played")
             player.playVideo();
         },
 
@@ -590,16 +593,6 @@ const app = new Vue({
                     info: "video muted",
              });
 
-            //  if(player.isMuted()){
-            //     player.unMute();
-            //     $("#mute_toggle").text('mute');
-                
-            // }
-            // else{
-            //     player.mute();
-            //     $("#mute_toggle").text('unmute');
-                
-            // }
         },
 
         fowardOrRewind(){
