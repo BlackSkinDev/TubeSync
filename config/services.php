@@ -37,9 +37,9 @@ return [
 
         'client_secret' => 'e0af66a46744a757dcb824162ce0088ebbdd40a3',
 
-        'redirect' => 'http://localhost:8000/callback/github',
+        //'redirect' => 'http://localhost:8000/callback/github',
 
-        //'redirect' => 'https://afrotubesync.herokuapp.com/callback/github',
+        'redirect' => 'https://afrotubesync.herokuapp.com/callback/github',
 
 
 
