@@ -71,7 +71,7 @@
                                     @endif
                                     <p><span id="current-time">0:00</span> / <span id="duration">0:00</span></p>
                                      @if(Auth::user()->id==$session->user->id)
-                                    <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;" v-on:mouseup="fowardOrRewind">
+                                    <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;">
                                       @endif
                                 </div>
                             </div>
@@ -177,16 +177,16 @@
 
 
 
-            //  $('#progress-bar').on('mouseup touchend', function (e) {
+             $('#progress-bar').on('mouseup touchend', function (e) {
 
-            //     // Calculate the new time for the video.
-            //     // new time in seconds = total duration in seconds * ( value of range input / 100 )
-            //     var newTime = player.getDuration() * (e.target.value / 100);
+                // Calculate the new time for the video.
+                // new time in seconds = total duration in seconds * ( value of range input / 100 )
+                var newTime = player.getDuration() * (e.target.value / 100);
 
-            //     // Skip video to new time.
-            //     player.seekTo(newTime);
+                // Skip video to new time.
+                player.seekTo(newTime);
               
-            // });
+            });
 
 
            
@@ -388,8 +388,7 @@ const app = new Vue({
                     
                      //player.seekTo(e.time);
 
-                     //player.playVideo()
-                     console.log("seeked")
+                     
 
                  
             })
@@ -595,14 +594,14 @@ const app = new Vue({
 
         },
 
-        fowardOrRewind(){
+        // fowardOrRewind(){
 
-             Echo.join('chatroom.'+this.session.id)
-                .whisper('change', {
-                    info: "video forward or rewinded",
-             });
+        //      Echo.join('chatroom.'+this.session.id)
+        //         .whisper('change', {
+        //             info: "video forward or rewinded",
+        //      });
 
-        },
+        // },
 
 
     }
