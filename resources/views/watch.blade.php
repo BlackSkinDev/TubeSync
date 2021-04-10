@@ -384,9 +384,9 @@ const app = new Vue({
 
             .listenForWhisper('played', (e) => {
                     
-                    //player.playVideo();
+                    player.playVideo();
                     
-                     player.seekTo(e.time);
+                     //player.seekTo(e.time);
 
                      //player.playVideo()
                      console.log("seeked")
