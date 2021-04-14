@@ -2,10 +2,11 @@ php:
   preset: laravel
   disabled:
     - no_unused_imports
-  finder:
+  finder:iuiu
     not-name:
       - index.php
       - server.php
+      - diuwqudiqwiuduiqewda
 js:
   finder:
     not-name:

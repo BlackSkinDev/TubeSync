@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Session;
 
 class Authenticate extends Middleware
 {
@@ -14,6 +15,12 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+        if($request->route()->getName()=='parties'){
+            $path=$request->path();
+            $groupId= substr($path, strpos($path, "/") + 1);
+            Session::put('join',$groupId);
+        }
+
         if (! $request->expectsJson()) {
             return route('signin');
         }

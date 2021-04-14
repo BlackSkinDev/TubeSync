@@ -8,11 +8,12 @@
         <meta name="keywords" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        
+
         <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-        
+
         <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="plugins/ionicons/dist/css/ionicons.min.css">
@@ -31,6 +32,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:#A9A9A9 !important">
               <div class="container-fluid">
                 <a class="navbar-brand" href="/dashboard">TubeSync</a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -39,19 +41,20 @@
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
                     </li>
-                    
+
                   </ul>
                    <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
                     </li>
-                  
+
                   </ul>
                 </div>
               </div>
             </nav>
+
             <div class="container" style="margin-top: 100px;">
-           
+
                 <div class="row" style="margin-top: 26px">
 
                     <div class="col-md-6">
@@ -59,20 +62,22 @@
                             <h5 class="card-header">Enjoy your party</h5>
                             <div class="card-body">
                                 <div id="party" style="width:100%; height:370px">
-                                           
+
+
+                                @if(Auth::user()->id==$session->user->id)
+                                    <button v-on:click="play"> <i class="fa fa-play fs-4x"></i></button>
+                                    <button id="pause" v-on:click="pause"> <i class="fa fa-pause fs-4x"></i></button>
+                                    <button id="mute-toggle" v-on:click="mute"><span>mute</span></button>
+
+                                @endif
+                                <p><span id="current-time">0:00</span> / <span id="duration">0:00</span></p>
+                                @if(Auth::user()->id==$session->user->id)
+                               <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;" class="range">
+                                  @endif
                                 </div>
                                 <div>
 
-                                    @if(Auth::user()->id==$session->user->id)
-                                        <button v-on:click="play"> <i class="fa fa-play fs-4x"></i></button>
-                                        <button id="pause" v-on:click="pause"> <i class="fa fa-pause fs-4x"></i></button>
-                                        <button id="mute-toggle" v-on:click="mute"><span>mute</span></button>
-                                    
-                                    @endif
-                                    <p><span id="current-time">0:00</span> / <span id="duration">0:00</span></p>
-                                     @if(Auth::user()->id==$session->user->id)
-                                    <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;">
-                                      @endif
+
                                 </div>
                             </div>
                         </div>
@@ -80,21 +85,21 @@
                     </div> <!-- column 6 ends -->
 
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 chat-room">
                          <div class="card">
                             <h5 class="card-header">Chat Room</h5>
                             <div class="card-body " style="max-height:500px;overflow-y:auto;" id="mainBody">
                                 <span class="badge bg-secondary rounded-pill" style="display: none;" id="start">Start chat..</span>
                                  <center><span class="badge badge-pill" style="color: brown"  v-if="activeUser">@{{ activeUser }} is typing...</span></center>
                                 <div id="messages">
-                        
+
 
                                 </div>
 
-                              
+
                             </div>
                         </div>
-                        
+
                         <div style="margin-top:10px;">
                         <input type="text" name="body" class="form-control" placeholder="Send Message.." id="messageBox" v-model="messageBox"  @keydown="sendTypingEvent" >
 
@@ -102,25 +107,25 @@
                         sendMessage">Send</button>
                         <div id="error" style="color: red;display: none">Message cannot be empty</div>
                         </div>
-                    
+
                     </div> <!-- column 4 ends -->
 
-                    <div class="col-md-2">
-                       
+                    <div class="col-md-2 online">
+
                         <div class="card">
                             <h5 class="card-header">Online users</h5>
                             <div class="card-body">
                                 <div class="alert alert-success" id="popUp" style="display: none;"></div>
                                 <div class="alert alert-danger" id="popUp2" style="display: none;"></div>
-                               
+
                                 <div id="users">
-                                    
+
                                 </div>
                                 <div class="input-group mb-3">
                                   <input type="text" class="form-control" id="link" value="{{url()->current()}}" aria-describedby="basic-addon2" disabled>
                                   <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" onclick="copy('link')" title="Copy Video Link">Link</button>
-                                  
+
                                   </div>
                                 </div>
                             </div>
@@ -140,31 +145,26 @@
 
 
 
-    
+
 
 
 
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
-        <script src="../plugins/popper.js/dist/umd/popper.min.js"></script>
-        <script src="../plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="../plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
-        <script src="../plugins/screenfull/dist/screenfull.js"></script>
-        <script src="../dist/js/theme.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
          <script src="https://www.youtube.com/iframe_api"></script>
-         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
          <script src="{{ asset('js/app.js') }}" ></script>
 
         <script>
-          
+
 
             function copy(element_id){
               var aux = document.createElement("div");
               aux.setAttribute("contentEditable", true);
               aux.innerHTML = document.getElementById(element_id).value;
-              aux.setAttribute("onfocus", "document.execCommand('selectAll',false,null)"); 
+              aux.setAttribute("onfocus", "document.execCommand('selectAll',false,null)");
               document.body.appendChild(aux);
               aux.focus();
               document.execCommand("copy");
@@ -185,11 +185,11 @@
 
                 // Skip video to new time.
                 player.seekTo(newTime);
-              
+
             });
 
 
-           
+
             // $('#play').on('click', function () {
 
             //         player.playVideo();
@@ -208,22 +208,22 @@
                     if(player.isMuted()){
                         player.unMute();
                         mute_toggle.text('mute');
-                        
+
                     }
                     else{
                         player.mute();
                         mute_toggle.text('unmute');
-                        
+
                     }
               });
 
 
 
 
-              
-               
+
+
               });  //end of jquery ready
-        
+
         // my vue.js section
 
 
@@ -243,7 +243,7 @@ const app = new Vue({
         activeUser:false,
         typingTimer:false,
         isAdmin,
-            
+
     },
     mounted(){
         this.joinRoom()
@@ -252,12 +252,12 @@ const app = new Vue({
 
     },
     methods:{
-        
+
         getMessages(){
             axios.get(`/messages/${this.session.id}`)
-                
+
                 .then( (response)=>{
-                   
+
                    this.messages=response.data
 
                    if (this.messages.length>0) {
@@ -265,19 +265,19 @@ const app = new Vue({
                     for (var i = 0; i < this.messages.length; i++) {
 
                         if (this.LoggedInUser.id == this.messages[i].user.id) {
-                        
+
                              $("#messages").append(
                                 '<div class="message mt-4 "><span class="ml-2"><b>You</b></span> <span style="color: #aaa;"> '+this.messages[i].created_at+'</span><div class="box2"><span>'+this.messages[i].content+'</span></div></div>');
-                   
+
                         }
-                   
+
                         else{
-                        
+
 
                             $("#messages").append(
                                 '<div class="message mt-4"><span class="ml-2"><b>'+this.messages[i].user.name+'</b></span> <span style="color: #aaa;"> '+this.messages[i].created_at+'</span><div class="box1"><span>'+this.messages[i].content+'</span></div></div>');
-                        }  
-                   
+                        }
+
                     }
 
 
@@ -288,10 +288,10 @@ const app = new Vue({
                         $("#start").show();
 
                    }
-                
 
-                    
-                }) 
+
+
+                })
                 .catch( function (error){
                   console.log(error);
                 })
@@ -306,9 +306,9 @@ const app = new Vue({
                         $("#users").append('<p id='+user[i].id+'><b>Admin: </b>'+user[i].name+'</p>');
                     }
                     else{
-                        $("#users").append('<p id='+user[i].id+'>'+user[i].name+'</p>');    
+                        $("#users").append('<p id='+user[i].id+'>'+user[i].name+'</p>');
                     }
-                    
+
                 }
             })
             .joining((user) => {
@@ -320,11 +320,11 @@ const app = new Vue({
                 else{
                      $("#users").append('<p id='+user.id+'>'+user.name+'</p>');
                 }
-                
+
 
                 $("#popUp").text(user.name+ " Joined");
 
-                $( "#popUp" ).show(); 
+                $( "#popUp" ).show();
 
                 setTimeout(function() {
 
@@ -338,21 +338,21 @@ const app = new Vue({
                  $("#"+user.id).remove();
                  $("#popUp2").text(user.name+ " Left");
 
-                $( "#popUp2" ).show(); 
+                $( "#popUp2" ).show();
 
                 setTimeout(function() {
 
                     $( "#popUp2" ).hide();
 
                 }, 3000);
-               
+
             })
             .listen('NewMessage', (message)=>{
                  console.log(message)
                 $("#messages").append(
                     '<div class="message mt-4"><span class="ml-2">'+message.user.name+'</span> <span style="color: #aaa;margin-left: 40px;"> '+message.created_at+'</span><div class="box1"><span>'+message.content+'</span></div></div>');
-                  
-                  
+
+
                   var myDiv = document.getElementById("mainBody");
                   myDiv.scrollTop = myDiv.scrollHeight;
 
@@ -366,31 +366,31 @@ const app = new Vue({
                 if (this.typingTimer) {
                     clearTimeout(this.typingTimer)
                 }
-                
+
                 this.typingTimer= setTimeout( ()=>{
                     this.activeUser=false
                  },3000)
-               
-                
+
+
             })
 
             .listenForWhisper('paused', (e) => {
 
                     console.log(e.info)
                    player.pauseVideo();
-                    
-                 
+
+
             })
 
             .listenForWhisper('played', (e) => {
-                    
+
                     player.playVideo();
-                    
+
                      //player.seekTo(e.time);
 
-                     
 
-                 
+
+
             })
 
              .listenForWhisper('mute', (e) => {
@@ -399,15 +399,15 @@ const app = new Vue({
                     if(player.isMuted()){
                         player.unMute();
                         $("#mute_toggle").text('mute');
-                        
+
                     }
                     else{
                         player.mute();
                         $("#mute_toggle").text('unmute');
-                        
+
                     }
-                    
-                 
+
+
             })
 
               .listenForWhisper('change', (e) => {
@@ -417,7 +417,7 @@ const app = new Vue({
 
                     // // Skip video to new time.
                     // player.seekTo(newTime);
-              
+
               });
 
 
@@ -426,7 +426,7 @@ const app = new Vue({
 
         sendMessage(){
             if (this.messageBox=='') {
-                 $( "#error" ).show(); 
+                 $( "#error" ).show();
 
                 setTimeout(function() {
 
@@ -439,8 +439,8 @@ const app = new Vue({
             //calling send message endpoint
 
               axios.post(`/send/${this.session.id}`, {
-                 content:this.messageBox 
-              })  
+                 content:this.messageBox
+              })
               .then( (response)=>{
                 this.newMessage=response.data
                 console.log(this.newMessage)
@@ -448,13 +448,13 @@ const app = new Vue({
                 $("#start").hide()
                  $("#messages").append(
                     '<div class="message mt-3" id="new' +this.newMessage.id+'"><span class="ml-2"><b>You</b></span> <span style="color: #aaa;margin-left: 40px;"> '+this.newMessage.created_at+'</span><div class="box2"><span>'+this.newMessage.content+'</span></div></div>');
-                      
+
                     // scroll to last message
                       var myDiv = document.getElementById("mainBody");
                       myDiv.scrollTop = myDiv.scrollHeight;
 
-               
-    
+
+
                 })
 
               .catch( function (error){
@@ -462,8 +462,8 @@ const app = new Vue({
               })
 
           }
-        //calling endpoint ends                
-                           
+        //calling endpoint ends
+
         },
 
          sendTypingEvent(){
@@ -471,10 +471,10 @@ const app = new Vue({
                 .whisper('typing', {
                     name: this.LoggedInUser.name,
              });
-               
+
         },
 
-       
+
         StartVideo(){
 
                             // starter function starts
@@ -482,7 +482,7 @@ const app = new Vue({
 
                 tag.src = "https://www.youtube.com/iframe_api";
                 var firstScriptTag = document.getElementsByTagName('script')[0];
-                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);                
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
                 window.YT.ready(function(){
 
                         player = new window.YT.Player('party', {
@@ -514,11 +514,11 @@ const app = new Vue({
                     });
                 })
 
-              
+
                 function initialize(){
                         updateTimerDisplay();
                         updateProgressBar();
-                        
+
 
                         //Dr. Cloud
 
@@ -530,7 +530,7 @@ const app = new Vue({
                         updateTimerDisplay();
                         updateProgressBar();
                 }, 1000)
-                
+
                 // Clear any old interval.
                 //clearInterval(time_update_interval);
              }
@@ -573,7 +573,7 @@ const app = new Vue({
              });
             player.pauseVideo();
 
-           
+
 
         },
 
@@ -610,8 +610,11 @@ const app = new Vue({
 
 
         // end of vue.js section
-            
+
         </script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

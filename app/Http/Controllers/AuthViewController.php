@@ -46,7 +46,7 @@ class AuthViewController extends Controller
         "username"=>$request['username'],
         "provider"=>0,
         "github_id"=>0,
-        
+
 
       ]);
     Session::flash('message','Accounted Created Successfully');
@@ -60,6 +60,10 @@ class AuthViewController extends Controller
       $errorType=false;
 
     if (Auth::attempt($credentials)) {
+
+        if(  Session::get('join')  ){
+            return redirect()->route('parties',['url'=>Session::get('join')]);
+        }
         return redirect()->route('dashboard');
 
       }
@@ -181,7 +185,7 @@ class AuthViewController extends Controller
             else{
               $username=$fullname[1];
             }
-           
+
             $user = User::create([
 
                 'name'     => $getInfo->name,
