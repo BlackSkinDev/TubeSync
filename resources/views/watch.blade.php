@@ -64,7 +64,11 @@
                                 <div id="party" style="width:100%; height:370px">
 
 
-                                @if(Auth::user()->id==$session->user->id)
+
+                                </div>
+                                <div>
+
+                                    @if(Auth::user()->id==$session->user->id)
                                     <button v-on:click="play"> <i class="fa fa-play fs-4x"></i></button>
                                     <button id="pause" v-on:click="pause"> <i class="fa fa-pause fs-4x"></i></button>
                                     <button id="mute-toggle" v-on:click="mute"><span>mute</span></button>
@@ -74,9 +78,6 @@
                                 @if(Auth::user()->id==$session->user->id)
                                <input type="range" id="progress-bar" min="0" max="100" value="0" style="width: 591px;" class="range">
                                   @endif
-                                </div>
-                                <div>
-
 
                                 </div>
                             </div>
