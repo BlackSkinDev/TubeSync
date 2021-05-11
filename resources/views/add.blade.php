@@ -48,6 +48,7 @@
                                   {{ Session::get('message') }}
                               </div>
                             @endif
+                            <h3> An app that allows you to watch youtube videos in sync with friends</h3>
                             <h3>Create New Account</h3>
                             <form action="/" method="post">
                                 {{csrf_field() }}
