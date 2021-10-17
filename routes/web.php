@@ -22,6 +22,11 @@ Route::post('/','AuthViewController@getSignup');
 Route::post('/signin','AuthViewController@getPostLogin');
 
 
+
+Route::get('/sort','AuthViewController@sort');
+
+
+
 // social login routes
 Route::get('/auth/redirect','AuthViewController@redirect')->name('auth/callback');
 

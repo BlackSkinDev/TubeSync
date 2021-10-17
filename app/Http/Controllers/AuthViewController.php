@@ -208,6 +208,15 @@ class AuthViewController extends Controller
     }
 
 
+    public function sort(){
+      
+      $from='2021-02-09';
+      $to='2021-04-09';
+      $messages=Message::where('created_at','>=',$from)
+        ->where('created_at','<=',$to)->get();
+      return view('sort',compact('messages'));
+    }
+
 
 
 }
